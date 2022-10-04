@@ -1,4 +1,5 @@
 using System;
+using Kesmai.Server.Combat.Calculators;
 using Kesmai.Server.Game;
 
 namespace Kesmai.Server.Items
@@ -13,33 +14,7 @@ namespace Kesmai.Server.Items
 		/// and <see cref="BaseAttackBonus"/>.
 		/// </remarks>
 		public virtual double GetAttackBonus(MobileEntity attacker, MobileEntity defender)
-		{
-			var attackBonus = BaseAttackBonus;
-
-			/* Enchanted weapons from a Knight have additional attack bonus based on the level of the knight. */
-			if (IsEnchanted)
-			{
-				if (attacker is PlayerEntity player)
-					attackBonus += ((player.Level - 5) / 3).Clamp(1, 5);
-				else
-					attackBonus += 1;
-			}
-
-			/*
-			 * "The Black Broadsword (BBS for short) is the best weapon in the game. It hits hard and blocks well.
-			 * 	Though the Silver Greataxe can hit harder at times, the BBS has a harder hitting average than the
-			 * 	Greataxe. The BBS has two advantages. First, it blocks well, and the BBS is "lawful" so it gains
-			 * 	one extra damage add against evil crits like dragons and drakes."
-			 * 
-			 */
-			if (defender != null)
-			{
-				if (Flags.HasFlag(WeaponFlags.Lawful) && defender.Alignment == Alignment.Evil)
-					attackBonus += 1;
-			}
-
-			return attackBonus;
-		}
+			=> AttackBonus.GetAttackBonus(attacker, defender, this);
 		
 		/// <inheritdoc/>
 		/// <remarks>

@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using Kesmai.Server.Accounting;
+using Kesmai.Server.Combat.Calculators;
 using Kesmai.Server.Engines.Commands;
 using Kesmai.Server.Game;
 using Kesmai.Server.Spells;
@@ -99,16 +100,8 @@ namespace Kesmai.Server.Items
 		/// <remarks>
 		/// Attack bonus provided by gloves is dependent on hand skill, hindrance, and <see cref="Penetration"/>.
 		/// </remarks>
-		public virtual double GetAttackBonus(MobileEntity attacker, MobileEntity defender)
-		{
-			var attackBonus = BaseAttackBonus + (double)Penetration;
-			
-			var skillLevel = attacker.GetSkillLevel(Skill.Hand);
-			var hindrance = attacker.CalculateHindrance();
-			var hindrancePenalty = (hindrance.Total * skillLevel) * 0.25;
-
-			return attackBonus - hindrancePenalty;
-		}
+		public virtual double GetAttackBonus(MobileEntity attacker, MobileEntity defender) 
+			=> AttackBonus.GetAttackBonus(attacker, defender, this);
 
 		/// <summary>
 		/// Gets the swing delay for this <see cref="Gauntlets"/> for <see cref="MobileEntity"/>.
