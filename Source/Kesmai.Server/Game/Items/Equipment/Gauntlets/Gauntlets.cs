@@ -74,12 +74,24 @@ namespace Kesmai.Server.Items
 		/// <inheritdoc />
 		public override int AttackSound => 47;
 		
-		/// <inheritdoc />
-		[WorldForge]
+		/// <summary>
+		/// Gets the minimum range at which this weapon can be used.
+		/// </summary>
 		[CommandProperty(AccessLevel.GameMaster)]
-		public int MaxRange => 0;
+		public virtual int MinimumRange => 0;
+
+		/// <summary>
+		/// Gets the maximum range at which this weapon can be used.
+		/// </summary>
+		[CommandProperty(AccessLevel.GameMaster)]
+		public virtual int MaximumRange => 0;
 
 		public Poison Poison { get; set; }
+		
+		/// <summary>
+		/// Gets a value indicating if the weapon is lawful.
+		/// </summary>
+		public bool IsLawful => (Flags & WeaponFlags.Lawful) != 0;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Gauntlets"/> class.
